@@ -1,6 +1,6 @@
 use std::env;
 
-use rand::{prelude::IteratorRandom, thread_rng};
+use rand::{prelude::IteratorRandom};
 
 struct Lotto {
     take: usize,
@@ -10,22 +10,40 @@ struct Lotto {
 
 impl Lotto {
     fn new(take: usize, from: usize) -> Self {
-        todo!("Implement")
+        let mut rng = &mut rand::thread_rng();
+        let numbers = (1..from+1).choose_multiple(&mut rng, take);
+        Lotto{take, from, numbers}
     }
 
     fn get_numbers(self) -> Vec<usize> {
-        todo!("Implement")
+        self.numbers
     }
 }
 
 fn format_lotto_results(lotto: &Lotto) -> String {
-    // Tip: Use the format macro
-    todo!("Implement")
+    format!("{} of {}: {:?}", lotto.take, lotto.from, lotto.numbers)
 }
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    todo!("Implement CLI")
+    if args.len()<3{
+        println!("At least two parameters, the take and from parameter must be defined.");
+        return;
+    }
+    if args.len()%2!=1{
+        println!("For every take parameter there must be a from parameter.");
+        return;
+    }
+    for i in (1..args.len()).step_by(2){
+        let take = args[i].parse::<usize>().expect("One take parameter is not a positive number.");
+        let from = args[i+1].parse::<usize>().expect("One from parameter is not a positive number.");
+        if take>from{
+            println!("The take parameter must be smaller or equal to the from value.");
+            return;
+        }
+        let lotto = Lotto::new(take, from);
+        println!("{}", format_lotto_results(&lotto))
+    }
 }
 
 #[test]
