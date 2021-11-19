@@ -15,8 +15,8 @@ impl Lotto {
         Lotto{take, from, numbers}
     }
 
-    fn get_numbers(self) -> Vec<usize> {
-        self.numbers
+    fn get_numbers(&self) -> Vec<usize> {
+        self.numbers.clone()
     }
 }
 
@@ -42,7 +42,9 @@ fn main() {
             return;
         }
         let lotto = Lotto::new(take, from);
-        println!("{}", format_lotto_results(&lotto))
+        println!("{}", format_lotto_results(&lotto));
+        println!("{:?}", lotto.get_numbers());
+        println!("{:?}", lotto.get_numbers());
     }
 }
 
